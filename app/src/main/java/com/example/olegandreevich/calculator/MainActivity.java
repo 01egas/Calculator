@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
         String editText = editTextOperand.getText().toString();
         if (operand != null && !editText.isEmpty() && !isCleanOperand) {
             calculate();
-            textViewHistory.append(fmt(lastOperand));
+            textViewHistory.append(formatDouble(lastOperand));
             textViewHistory.append(" " + EQUALLY + " ");
-            textViewHistory.append(fmt(operand));
+            textViewHistory.append(formatDouble(operand));
             textViewHistory.append("\n");
             lastOperation = EQUALLY;
             isCleanOperand = true;
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 operand -= lastOperand;
                 break;
         }
-        editTextOperand.setText(fmt(operand));
+        editTextOperand.setText(formatDouble(operand));
     }
 
 
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static String fmt(double d) {
+    public static String formatDouble(double d) {
         if (d == (long) d)
             return String.format("%d", (long) d);
         else
