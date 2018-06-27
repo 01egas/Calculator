@@ -1,5 +1,6 @@
 package com.example.olegandreevich.calculator;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @OnClick({R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine, R.id.btnZero})
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         if (operand != null && !editText.isEmpty() && !isCleanOperand) {
             calculate();
             textViewHistory.append(fmt(lastOperand));
-            textViewHistory.append(" " + "=" + " ");
+            textViewHistory.append(" " + EQUALLY + " ");
             textViewHistory.append(fmt(operand));
             textViewHistory.append("\n");
             lastOperation = EQUALLY;
@@ -88,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (lastOperation.equals(EQUALLY)) {
             operand = Double.valueOf(number);
+            textViewHistory.append(number + " " + operation + " ");
             lastOperation = operation;
-            textViewHistory.append(number + " " + lastOperation + " ");
         } else if (!lastOperation.equals(EQUALLY) && isCleanOperand) {
             history = textViewHistory.getText().toString();
             history = history.substring(0, history.length() - 3);
@@ -159,7 +161,10 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btnDot)
     public void onDotClick() {
         etView = editTextOperand.getText().toString();
-        if (!etView.contains(DOT)) {
+        if (etView.isEmpty()) {
+            editTextOperand.append("0" + DOT);
+            isCleanOperand = false;
+        } else if (!etView.contains(DOT)) {
             editTextOperand.append(DOT);
         }
     }
@@ -169,16 +174,17 @@ public class MainActivity extends AppCompatActivity {
         etView = editTextOperand.getText().toString();
         if (!etView.contains(SUBTRACTION)) {
             editTextOperand.setText(SUBTRACTION + etView);
+            operand = Double.valueOf(editTextOperand.getText().toString());
         } else {
             editTextOperand.setText(etView.replace(SUBTRACTION, ""));
+            operand = Double.valueOf(editTextOperand.getText().toString());
         }
     }
 
-    public static String fmt(double d)
-    {
-        if(d == (long) d)
-            return String.format("%d",(long)d);
+    public static String fmt(double d) {
+        if (d == (long) d)
+            return String.format("%d", (long) d);
         else
-            return String.format("%s",d);
+            return String.format("%s", d);
     }
 }
