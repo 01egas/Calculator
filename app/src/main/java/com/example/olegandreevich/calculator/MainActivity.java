@@ -174,10 +174,8 @@ public class MainActivity extends AppCompatActivity {
         etView = editTextOperand.getText().toString();
         if (!etView.contains(SUBTRACTION)) {
             editTextOperand.setText(SUBTRACTION + etView);
-            operand = Double.valueOf(editTextOperand.getText().toString());
         } else {
             editTextOperand.setText(etView.replace(SUBTRACTION, ""));
-            operand = Double.valueOf(editTextOperand.getText().toString());
         }
     }
 
