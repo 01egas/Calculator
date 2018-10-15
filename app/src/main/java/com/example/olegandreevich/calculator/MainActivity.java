@@ -14,12 +14,12 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String DIVISION = "/";
-    private final String ADDITION = "+";
-    private final String MULTIPLICATION = "*";
-    private final String SUBTRACTION = "-";
-    private final String EQUALLY = "=";
-    private final String DOT = ".";
+    private final static String DIVISION = "/";
+    private final static String ADDITION = "+";
+    private final static String MULTIPLICATION = "*";
+    private final static String SUBTRACTION = "-";
+    private final static String EQUALLY = "=";
+    private final static String DOT = ".";
 
     private Double operand = null;
     private Double lastOperand = null;
@@ -157,7 +157,8 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btnDot)
     public void onDotClick() {
         etView = editTextOperand.getText().toString();
-        if (etView.isEmpty()) {
+        if (etView.isEmpty() || isOperandEmpty) {
+            editTextOperand.setText("");
             editTextOperand.append("0" + DOT);
             isOperandEmpty = false;
         } else if (!etView.contains(DOT)) {
