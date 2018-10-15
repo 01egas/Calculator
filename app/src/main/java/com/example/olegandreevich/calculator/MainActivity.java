@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Double operand = null;
     private Double lastOperand = null;
     private String lastOperation = EQUALLY;
-    private boolean isCleanOperand = true;
+    private boolean isOperandEmpty = true;
     private String history = "";
     private String etView = "";
 
@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
     @OnClick({R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine, R.id.btnZero})
     public void onNumberButtonClick(View view) {
 
-        if (isCleanOperand) {
+        if (isOperandEmpty) {
             editTextOperand.setText("");
         }
         Button button = (Button) view;
         editTextOperand.append(button.getText().toString());
-        isCleanOperand = false;
+        isOperandEmpty = false;
 
 
     }
@@ -68,21 +68,23 @@ public class MainActivity extends AppCompatActivity {
                 editTextOperand.setText("");
             }
         }
-        isCleanOperand = true;
+        isOperandEmpty = true;
 
     }
 
     @OnClick(R.id.btnEqually)
     public void onEquallyClick(View view) {
         String editText = editTextOperand.getText().toString();
-        if (operand != null && !editText.isEmpty() && !isCleanOperand) {
+        if (operand != null && !editText.isEmpty() && !isOperandEmpty) {
             calculate();
             textViewHistory.append(formatDouble(lastOperand));
             textViewHistory.append(" " + EQUALLY + " ");
             textViewHistory.append(formatDouble(operand));
             textViewHistory.append("\n");
             lastOperation = EQUALLY;
-            isCleanOperand = true;
+            isOperandEmpty = true;
+            operand = lastOperand;
+            operand = null;
         }
     }
 
@@ -92,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
             operand = Double.valueOf(number);
             textViewHistory.append(number + " " + operation + " ");
             lastOperation = operation;
-        } else if (!lastOperation.equals(EQUALLY) && isCleanOperand) {
+        } else if (!lastOperation.equals(EQUALLY) && isOperandEmpty) {
             history = textViewHistory.getText().toString();
             history = history.substring(0, history.length() - 3);
             history = history + " " + operation + " ";
             textViewHistory.setText(history);
             lastOperation = operation;
-        } else if (operand != null && !lastOperation.equals(EQUALLY) && !isCleanOperand) {
+        } else if (operand != null && !lastOperation.equals(EQUALLY) && !isOperandEmpty) {
             textViewHistory.append(number);
             textViewHistory.append(" " + operation + " ");
             calculate();
@@ -132,12 +134,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.btnC)
-    public void onClearEditTextClick() {
-        operand = null;
-        editTextOperand.setText("");
-        lastOperation = EQUALLY;
-    }
 
     @OnClick(R.id.btnAC)
     public void onAllClearClick() {
@@ -146,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         editTextOperand.setText("");
         textViewHistory.setText("");
         lastOperation = EQUALLY;
-        isCleanOperand = true;
+        isOperandEmpty = true;
         history = "";
     }
 
@@ -163,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         etView = editTextOperand.getText().toString();
         if (etView.isEmpty()) {
             editTextOperand.append("0" + DOT);
-            isCleanOperand = false;
+            isOperandEmpty = false;
         } else if (!etView.contains(DOT)) {
             editTextOperand.append(DOT);
         }
