@@ -1,5 +1,6 @@
 package com.example.olegandreevich.calculator;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private final static String SUBTRACTION = "-";
     private final static String EQUALLY = "=";
     private final static String DOT = ".";
+
+    private RefWatcher refWatcher;
 
     private Double operand = null;
     private Double lastOperand = null;
@@ -42,8 +46,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        LeakCanary.install(this.getApplication());
+        refWatcher = LeakCanary.install(this.getApplication());
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+
+    public static RefWatcher getRefWatcher(Context context) {
+        MainActivity application = (MainActivity) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MainActivity.getRefWatcher(this);
+        refWatcher.watch(this);
     }
 
     @OnClick({R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine, R.id.btnZero})
