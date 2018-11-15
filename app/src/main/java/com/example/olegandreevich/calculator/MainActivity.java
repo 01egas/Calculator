@@ -3,6 +3,7 @@ package com.example.olegandreevich.calculator;
 
 import android.content.pm.ActivityInfo;
 
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -48,17 +49,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        checkLeak();
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        wrongWay();
     }
 
-    public void checkLeak() {
-        RefWatcher refWatcher = LeakCanaryApplication.getRefWatcher(this);
-        refWatcher.watch(this);
+    private void wrongWay() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    SystemClock.sleep(1000);
+                }
+            }
+        };
+        thread.start();
     }
-
 
     @OnClick({R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine, R.id.btnZero})
     public void onNumberButtonClick(View view) {

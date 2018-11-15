@@ -11,17 +11,13 @@ import com.squareup.leakcanary.RefWatcher;
 public class LeakCanaryApplication extends Application {
     private RefWatcher refWatcher;
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         super.onCreate();
-
         refWatcher = LeakCanary.install(this);
     }
 
     public static RefWatcher getRefWatcher(Context context) {
-        LeakCanaryApplication application = (LeakCanaryApplication) context.getApplicationContext();
-        return application.refWatcher;
+        LeakCanaryApplication exampleApplication = (LeakCanaryApplication) context.getApplicationContext();
+        return exampleApplication.refWatcher;
     }
-
-
 }
